@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FriendMap UNT - Ubica a tus amigos en el campus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navbar */
+        nav {
+            background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "📍";
+            font-size: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.9) 0%, rgba(13, 71, 161, 0.9) 100%), url('unt fondo.jpg') center/cover;
+            background-attachment: fixed;
+            color: white;
+            padding: 4rem 0;
+            min-height: 650px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('unt fondo.jpg') center/cover;
+            filter: blur(6px);
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(30, 136, 229, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: slideDown 0.8s ease-out;
+            text-align: left;
+            font-weight: 800;
+            line-height: 1.1;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+            color: #ffffff;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            opacity: 1;
+            animation: slideUp 0.8s ease-out;
+            text-align: left;
+            line-height: 1.6;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35);
+            color: #f0f0f0;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #1e88e5;
+            padding: 1.2rem 2.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 1rem 2.5rem;
+        }
+
+        .cta-button-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-phone {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slideRight 0.8s ease-out;
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.3));
+        }
+
+        .phone-frame {
+            position: relative;
+            width: 300px;
+            height: 620px;
+            background: white;
+            border-radius: 45px;
+            padding: 13px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            border: 8px solid #333;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 25px 25px;
+            z-index: 10;
+        }
+
+        .phone-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 35px;
+            display: block;
+        }
+
+        .phone-notification {
+            position: absolute;
+            top: 55px;
+            left: 15px;
+            right: 15px;
+            background: white;
+            padding: 14px 16px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            z-index: 20;
+            animation: slideDown 0.8s ease-out 0.3s backwards;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phone-notification-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+            border-radius: 12px;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .phone-notification-text {
+            flex: 1;
+        }
+
+        .phone-notification-text-title {
+            font-weight: 700;
+            color: #1e88e5;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .phone-notification-text-desc {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #1e88e5;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #1e88e5;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Map Preview Section */
+        .map-preview {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .preview-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .preview-text h2 {
+            font-size: 2.3rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-text p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .map-container {
+            position: relative;
+            border-radius: 15px;
+            box-shadow: 0 10px 35px rgba(30, 136, 229, 0.2);
+            overflow: hidden;
+            background: #f0f0f0;
+            width: 100%;
+            aspect-ratio: 4/3;
+        }
+
+        .preview-image {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #e8e8e8;
+        }
+
+        .preview-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.1s ease;
+            transform-origin: center;
+            user-select: none;
+        }
+
+        .map-container {
+            cursor: grab;
+        }
+
+        .map-container.dragging {
+            cursor: grabbing;
+        }
+
+        /* Controles de zoom */
+        .zoom-controls {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            background: white;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e88e5;
+            font-weight: bold;
+        }
+
+        .zoom-btn:first-child {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .zoom-btn:hover {
+            background: #1e88e5;
+            color: white;
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.9);
+        }
+
+        .zoom-info {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #666;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: #666;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 2rem 0;
+                min-height: 100vh;
+            }
+
+            .hero .container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hero-phone {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-content {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-text h2 {
+                font-size: 1.8rem;
+            }
+
+            .steps {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .step {
+                padding: 1.5rem 1rem;
+            }
+
+            .step h3 {
+                font-size: 1rem;
+            }
+
+            .step p {
+                font-size: 0.9rem;
+            }
+
+            .step-number {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                margin-bottom: 0.8rem;
+            }
+
+            nav .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            .cta-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .logo::before {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                min-height: auto;
+                padding: 1.5rem 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .phone-frame {
+                width: 180px;
+                height: 370px;
+            }
+
+            .cta-button {
+                padding: 0.8rem 1.8rem;
+                font-size: 0.95rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .feature-icon {
+                font-size: 2.5rem;
+            }
+
+            .step-number {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
+            .map-container {
+                aspect-ratio: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="container">
+            <div class="logo">FriendMap</div>
+            <div>
+                <a href="#features">Características</a>
+                <a href="#how-it-works">¿Cómo funciona?</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Alertas de lugar.</h1>
+                <p>Sepa dónde están sin tener que preguntar.</p>
+                <div class="hero-cta">
+                    <button class="cta-button">Descargar Aplicación</button>
+                </div>
+            </div>
+            <div class="hero-phone">
+                <div class="phone-frame">
+                    <img src="mapa.png" alt="Pantalla de FriendMap UNT">
+                    <div class="phone-notification">
+                        <div class="phone-notification-icon">📍</div>
+                        <div class="phone-notification-text">
+                            <div class="phone-notification-text-title">FriendMap UNT</div>
+                            <div class="phone-notification-text-desc">Tu amigo llegó a clase</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">¿Por qué FriendMap?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📍</div>
+                    <h3>Ubicación en Tiempo Real</h3>
+                    <p>Visualiza dónde se encuentran tus compañeros dentro del campus con actualización instantánea</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Privacidad y Seguridad</h3>
+                    <p>Controla quién puede ver tu ubicación en el campus. Solo comparte con tus compañeros de confianza</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Historial de Ubicaciones</h3>
+                    <p>Guarda un registro de dónde han estado tus compañeros en el campus</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Preview Section -->
+    <section class="map-preview">
+        <div class="container">
+            <div class="preview-content">
+                <div class="preview-text">
+                    <h2>Mira cómo funciona</h2>
+                    <p>Nuestro mapa interactivo del campus UNT te muestra la ubicación exacta de cada uno de tus compañeros en tiempo real. Puedes hacer zoom, acercarte a cualquier ubicación y ver detalles específicos.</p>
+                    <p>La interfaz es intuitiva y fácil de usar, perfecta para estar conectado con tu grupo de compañeros y saber dónde localizarlos en el campus.</p>
+                </div>
+                <div class="map-container" id="mapContainer">
+                    <div class="preview-image" id="mapImage">
+                        <img src="mapa.png" alt="Mapa del Campus UNT - FriendMap" id="mapImg">
+                    </div>
+                    
+                    <!-- Información del zoom -->
+                    <div class="zoom-info">
+                        Zoom: <span id="zoomLevel">100</span>%
+                    </div>
+
+                    <!-- Controles de zoom -->
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" id="zoomInBtn" title="Acercar">+</button>
+                        <button class="zoom-btn" id="zoomOutBtn" title="Alejar">−</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">¿Cómo funciona?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Descarga la App</h3>
+                    <p>Obtén FriendMap UNT en tu dispositivo móvil</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Inicia Sesión</h3>
+                    <p>Usa tu correo institucional de la UNT</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Agrega Compañeros</h3>
+                    <p>Invita a tus compañeros del campus</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Comparte Ubicación</h3>
+                    <p>Activa el compartir dentro del campus</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>¡Conecta!</h3>
+                    <p>Localiza a tus compañeros en la UNT</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>¿Listo para conectar en el campus?</h2>
+            <p>Únete a la comunidad de estudiantes y docentes de la UNT</p>
+            <button class="cta-button">Descargar Ahora</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 FriendMap UNT - Universidad Nacional de Trujillo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Control del mapa interactivo - Arrastre y zoom
+        let zoomLevel = 100;
+        let offsetX = 0;
+        let offsetY = 0;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        const maxZoom = 250;
+        const minZoom = 100; // No se puede hacer zoom menor a 100%
+
+        const mapContainer = document.getElementById('mapContainer');
+        const mapImg = document.getElementById('mapImg');
+        const mapImage = document.getElementById('mapImage');
+        const zoomLevelDisplay = document.getElementById('zoomLevel');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+
+        function calculateMaxOffset() {
+            const containerRect = mapImage.getBoundingClientRect();
+            const scale = zoomLevel / 100;
+            
+            const scaledWidth = containerRect.width * scale;
+            const scaledHeight = containerRect.height * scale;
+            
+            const maxOffsetX = Math.max(0, (scaledWidth - containerRect.width) / 2 / scale);
+            const maxOffsetY = Math.max(0, (scaledHeight - containerRect.height) / 2 / scale);
+            
+            return { maxOffsetX, maxOffsetY };
+        }
+
+        function updateMapView() {
+            const scale = zoomLevel / 100;
+            const { maxOffsetX, maxOffsetY } = calculateMaxOffset();
+            
+            // Limitar offsets
+            offsetX = Math.max(-maxOffsetX, Math.min(maxOffsetX, offsetX));
+            offsetY = Math.max(-maxOffsetY, Math.min(maxOffsetY, offsetY));
+            
+            mapImg.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            zoomLevelDisplay.textContent = zoomLevel;
+        }
+
+        function zoom(direction) {
+            const step = 25;
+            if (direction === 'in') {
+                zoomLevel = Math.min(maxZoom, zoomLevel + step);
+            } else {
+                // Al hacer zoom -, regresa al 100%
+                zoomLevel = 100;
+                offsetX = 0;
+                offsetY = 0;
+            }
+            updateMapView();
+        }
+
+        // Arrastre del mapa
+        mapImage.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            dragOffsetX = offsetX;
+            dragOffsetY = offsetY;
+            mapContainer.classList.add('dragging');
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const scale = zoomLevel / 100;
+            const deltaX = (e.clientX - dragStartX) / scale;
+            const deltaY = (e.clientY - dragStartY) / scale;
+
+            offsetX = dragOffsetX + deltaX;
+            offsetY = dragOffsetY + deltaY;
+
+            updateMapView();
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            mapContainer.classList.remove('dragging');
+        });
+
+        // Eventos de zoom
+        zoomInBtn.addEventListener('click', () => zoom('in'));
+        zoomOutBtn.addEventListener('click', () => zoom('out'));
+
+        // Zoom con rueda del ratón
+        mapImage.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                zoom('in');
+            } else {
+                zoom('out');
+            }
+        });
+
+        // Inicializar
+        updateMapView();
+        window.addEventListener('resize', updateMapView);
+    </script>
+</body>
+</html>
